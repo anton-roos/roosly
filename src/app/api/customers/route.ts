@@ -10,24 +10,24 @@ if (!process.env.DATABASE_URL) {
 const sql = neon(process.env.DATABASE_URL!); // Use non-null assertion operator
 
 // Helper function to check admin authentication
-async function checkAdminAuth() {
+async function checkAdminAuth(): Promise<NextResponse | null> {
     const session = await auth();
     
     if (!session || !session.user) {
-        return { authorized: false, response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     
     if (session.user.role !== "admin") {
-        return { authorized: false, response: NextResponse.json({ error: "Forbidden - Admin access required" }, { status: 403 }) };
+        return NextResponse.json({ error: "Forbidden - Admin access required" }, { status: 403 });
     }
     
-    return { authorized: true, response: null };
+    return null;
 }
 
 // Wrap all API handlers with try-catch for error handling
 export async function GET() {
     const authCheck = await checkAdminAuth();
-    if (!authCheck.authorized) return authCheck.response;
+    if (authCheck) return authCheck;
     
     try {
         const customers = await sql`SELECT * FROM customers ORDER BY id DESC;`;
@@ -43,7 +43,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
     const authCheck = await checkAdminAuth();
-    if (!authCheck.authorized) return authCheck.response;
+    if (authCheck) return authCheck;
     
     try {
         const body = await request.json();
@@ -111,7 +111,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     const authCheck = await checkAdminAuth();
-    if (!authCheck.authorized) return authCheck.response;
+    if (authCheck) return authCheck;
     
     try {
         const body = await request.json();
@@ -162,7 +162,7 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
     const authCheck = await checkAdminAuth();
-    if (!authCheck.authorized) return authCheck.response;
+    if (authCheck) return authCheck;
     
     try {
         const { searchParams } = new URL(request.url);
