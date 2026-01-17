@@ -13,6 +13,10 @@ export async function GET() {
     try {
         // Ensure the response is always an array
         const customers = await sql`SELECT * FROM customers;`;
+
+        // Log the raw database query result for debugging
+        console.log("Raw database query result:", customers);
+
         return NextResponse.json(customers || []);
     } catch (error) {
         console.error("Error fetching customers:", error);
