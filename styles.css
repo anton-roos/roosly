@@ -199,6 +199,22 @@ body {
     background: var(--secondary-color);
 }
 
+.service-card.expanded {
+    background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-light) 100%);
+    border: 2px solid var(--primary-color);
+    transform: scale(1.02);
+}
+
+.service-card.expanded .service-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.service-card.expanded h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
 /* About Section */
 .about {
     padding: 80px 20px;
