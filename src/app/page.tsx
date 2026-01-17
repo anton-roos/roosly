@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useAnalytics } from '../lib/analytics'
+import RooslyLogo from '../components/RooslyLogo'
 
 const serviceDetails = {
   websites: {
@@ -44,20 +46,82 @@ const serviceDetails = {
 export default function Home() {
   const [expandedService, setExpandedService] = useState<string | null>(null)
   const [formMessage, setFormMessage] = useState('')
+  const analytics = useAnalytics()
+
+  useEffect(() => {
+    // Track page load time
+    const loadTime = performance.now()
+
+    // Track initial page view
+    analytics.trackTimeOnPage(Math.round(loadTime / 1000), 'home')
+
+    // Track scroll depth
+    let maxScrollDepth = 0
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrollPercent = Math.round((scrollTop / docHeight) * 100)
+
+      if (scrollPercent > maxScrollDepth && scrollPercent % 25 === 0) {
+        maxScrollDepth = scrollPercent
+        analytics.trackScrollDepth(scrollPercent)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    // Track time spent on page
+    const timeInterval = setInterval(() => {
+      const timeSpent = Math.round((performance.now() - loadTime) / 1000)
+      if (timeSpent % 30 === 0 && timeSpent > 0) { // Track every 30 seconds
+        analytics.trackTimeOnPage(timeSpent, 'home')
+      }
+    }, 1000)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      clearInterval(timeInterval)
+    }
+  }, [analytics])
 
   const showServiceDetails = (serviceId: string) => {
-    setExpandedService(serviceId === expandedService ? null : serviceId)
+    const newExpanded = serviceId === expandedService ? null : serviceId
+    setExpandedService(newExpanded)
+
+    if (newExpanded) {
+      analytics.trackServiceInteraction(serviceId, 'expand')
+    }
   }
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate form submission
+    analytics.trackFormSubmit('contact_form', true)
     setFormMessage('Thank you! We will get back to you soon.')
     setTimeout(() => setFormMessage(''), 5000)
   }
 
   const scrollToSection = (sectionId: string) => {
+    analytics.trackNavigation('hero', sectionId)
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const handleCTAClick = () => {
+    analytics.trackButtonClick('explore_services', 'hero')
+    scrollToSection('services')
+  }
+
+  const handleLearnMoreClick = (serviceId: string, isExpanded: boolean) => {
+    analytics.trackButtonClick(`learn_more_${serviceId}`, 'services')
+    if (isExpanded) {
+      analytics.trackServiceInteraction(serviceId, 'contact')
+      scrollToSection('contact')
+    } else {
+      showServiceDetails(serviceId)
+    }
+  }
+
+  const handleSocialClick = (platform: string) => {
+    analytics.trackSocialInteraction(platform, 'click')
   }
 
   return (
@@ -65,11 +129,11 @@ export default function Home() {
       {/* Navigation */}
       <nav className="navbar">
         <div className="nav-container">
-          <div className="logo">Roosly</div>
+          <RooslyLogo className="logo" size={50} />
           <ul className="nav-menu">
-            <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services') }}>Services</a></li>
-            <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about') }}>About</a></li>
-            <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact') }}>Contact</a></li>
+            <li><a href="#services" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'services'); scrollToSection('services') }}>Services</a></li>
+            <li><a href="#about" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'about'); scrollToSection('about') }}>About</a></li>
+            <li><a href="#contact" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'contact'); scrollToSection('contact') }}>Contact</a></li>
           </ul>
         </div>
       </nav>
@@ -79,7 +143,7 @@ export default function Home() {
         <div className="hero-content">
           <h1>Welcome to Roosly</h1>
           <p>Your Partner in Digital Transformation</p>
-          <button className="cta-button" onClick={() => scrollToSection('services')}>Explore Our Services</button>
+          <button className="cta-button" onClick={handleCTAClick}>Explore Our Services</button>
         </div>
       </section>
 
@@ -103,7 +167,7 @@ export default function Home() {
                     </ul>
                   </div>
                 )}
-                <button className="learn-more" onClick={() => expandedService === id ? scrollToSection('contact') : showServiceDetails(id)}>
+                <button className="learn-more" onClick={() => handleLearnMoreClick(id, expandedService === id)}>
                   {expandedService === id ? 'Get Started' : 'Learn More'}
                 </button>
               </div>
@@ -116,7 +180,7 @@ export default function Home() {
       <section id="about" className="about">
         <div className="container">
           <h2>About Roosly</h2>
-          <p>At Roosly, we're passionate about delivering innovative digital solutions that drive real business value. With a team of experienced developers, consultants, and AI specialists, we transform ideas into powerful digital products.</p>
+          <p>At Roosly, we&apos;re passionate about delivering innovative digital solutions that drive real business value. With a team of experienced developers, consultants, and AI specialists, we transform ideas into powerful digital products.</p>
           <div className="about-features">
             <div className="feature">
               <h4>Expert Team</h4>
@@ -157,10 +221,10 @@ export default function Home() {
         <div className="container">
           <p>&copy; 2026 Roosly. All rights reserved.</p>
           <div className="social-links">
-            <a href="#">Twitter</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">GitHub</a>
-            <a href="#">Facebook</a>
+            <a href="#" onClick={() => handleSocialClick('twitter')}>Twitter</a>
+            <a href="#" onClick={() => handleSocialClick('linkedin')}>LinkedIn</a>
+            <a href="#" onClick={() => handleSocialClick('github')}>GitHub</a>
+            <a href="#" onClick={() => handleSocialClick('facebook')}>Facebook</a>
           </div>
         </div>
       </footer>
