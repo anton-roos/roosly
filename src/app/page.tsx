@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAnalytics } from '../lib/analytics'
 import RooslyLogo from '../components/RooslyLogo'
+import emailjs from '@emailjs/browser'
 
 const serviceDetails = {
   websites: {
@@ -93,10 +94,34 @@ export default function Home() {
     }
   }
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    analytics.trackFormSubmit('contact_form', true)
-    setFormMessage('Thank you! We will get back to you soon.')
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
+    const message = formData.get('message') as string
+
+    try {
+      await emailjs.send(
+        'service_tiabc2r',
+        'template_8ptz2d8',
+        {
+          from_name: name,
+          from_email: email,
+          message: message,
+          to_email: 'antonroos992@gmail.com'
+        },
+        'tfLmRyTiSovdCULB8'
+      )
+      setFormMessage('Thank you! We will get back to you soon.')
+      analytics.trackFormSubmit('contact_form', true)
+      form.reset() // Clear the form
+    } catch (error) {
+      console.error('Email send error:', error)
+      setFormMessage('Sorry, there was an error sending your message. Please try again.')
+      analytics.trackFormSubmit('contact_form', false)
+    }
     setTimeout(() => setFormMessage(''), 5000)
   }
 
