@@ -1,65 +1,169 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+
+const serviceDetails = {
+  websites: {
+    title: 'Website Creation & Hosting',
+    icon: '🌐',
+    description: 'We design and deploy stunning websites tailored to your business needs, with reliable hosting and maintenance.',
+    features: ['Responsive Design', 'SEO Optimization', 'Performance Tuning', 'SSL Security', '24/7 Hosting Support', 'Regular Backups']
+  },
+  software: {
+    title: 'Custom Software Engineering',
+    icon: '💻',
+    description: 'End-to-end software solutions designed specifically for your business challenges and goals.',
+    features: ['System Architecture', 'Full-Stack Development', 'Quality Assurance', 'Scalable Solutions', 'Cloud Integration', 'Maintenance & Support']
+  },
+  apps: {
+    title: 'App Development',
+    icon: '📱',
+    description: 'Native and cross-platform mobile applications built with modern technologies and best practices.',
+    features: ['iOS & Android', 'React Native', 'Flutter', 'User Experience Design', 'App Store Deployment', 'Analytics Integration']
+  },
+  technical: {
+    title: 'Technical Consultation',
+    icon: '🔧',
+    description: 'Expert guidance on architecture, infrastructure, and technology strategy for your projects.',
+    features: ['Architecture Review', 'Technology Stack Selection', 'Performance Analysis', 'Security Assessment', 'DevOps Strategy', 'Team Training']
+  },
+  ai: {
+    title: 'AI Consultation',
+    icon: '🤖',
+    description: 'Harness the power of artificial intelligence with our strategic consultation and implementation services.',
+    features: ['ML Model Development', 'LLM Integration', 'Data Analysis', 'Predictive Analytics', 'Automation Solutions', 'AI Strategy Planning']
+  },
+  performance: {
+    title: 'Performance Optimization',
+    icon: '⚡',
+    description: 'Speed up your digital products with performance analysis and optimization strategies.',
+    features: ['Code Profiling', 'Database Optimization', 'Caching Strategies', 'Load Testing', 'CDN Setup', 'Monitoring & Alerts']
+  }
+}
 
 export default function Home() {
+  const [expandedService, setExpandedService] = useState<string | null>(null)
+  const [formMessage, setFormMessage] = useState('')
+
+  const showServiceDetails = (serviceId: string) => {
+    setExpandedService(serviceId === expandedService ? null : serviceId)
+  }
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Simulate form submission
+    setFormMessage('Thank you! We will get back to you soon.')
+    setTimeout(() => setFormMessage(''), 5000)
+  }
+
+  const scrollToSection = (sectionId: string) => {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      {/* Navigation */}
+      <nav className="navbar">
+        <div className="nav-container">
+          <div className="logo">Roosly</div>
+          <ul className="nav-menu">
+            <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services') }}>Services</a></li>
+            <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about') }}>About</a></li>
+            <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact') }}>Contact</a></li>
+          </ul>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="hero-content">
+          <h1>Welcome to Roosly</h1>
+          <p>Your Partner in Digital Transformation</p>
+          <button className="cta-button" onClick={() => scrollToSection('services')}>Explore Our Services</button>
         </div>
-      </main>
-    </div>
-  );
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="services">
+        <div className="container">
+          <h2>Our Services</h2>
+          <div className="services-grid">
+            {Object.entries(serviceDetails).map(([id, service]) => (
+              <div key={id} className={`service-card ${expandedService === id ? 'expanded' : ''}`}>
+                <div className="service-icon">{service.icon}</div>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                {expandedService === id && (
+                  <div style={{ marginBottom: '1rem' }}>
+                    <h4 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem' }}>Key Features:</h4>
+                    <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+                      {service.features.map((feature, index) => (
+                        <li key={index} style={{ color: 'var(--text-light)', padding: '0.25rem 0' }}>✓ {feature}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <button className="learn-more" onClick={() => expandedService === id ? scrollToSection('contact') : showServiceDetails(id)}>
+                  {expandedService === id ? 'Get Started' : 'Learn More'}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="about">
+        <div className="container">
+          <h2>About Roosly</h2>
+          <p>At Roosly, we're passionate about delivering innovative digital solutions that drive real business value. With a team of experienced developers, consultants, and AI specialists, we transform ideas into powerful digital products.</p>
+          <div className="about-features">
+            <div className="feature">
+              <h4>Expert Team</h4>
+              <p>Seasoned professionals with years of experience across all major technologies.</p>
+            </div>
+            <div className="feature">
+              <h4>Client-Focused</h4>
+              <p>We prioritize your success and work closely with you every step of the way.</p>
+            </div>
+            <div className="feature">
+              <h4>Innovation First</h4>
+              <p>Always exploring cutting-edge technologies to deliver the best solutions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="contact">
+        <div className="container">
+          <h2>Get In Touch</h2>
+          <form className="contact-form" onSubmit={handleContactSubmit}>
+            <input type="text" name="name" placeholder="Your Name" required />
+            <input type="email" name="email" placeholder="Your Email" required />
+            <textarea name="message" placeholder="Your Message" rows={5} required></textarea>
+            <button type="submit" className="submit-btn">Send Message</button>
+            {formMessage && (
+              <div id="form-message" className="success" style={{ display: 'block' }}>
+                {formMessage}
+              </div>
+            )}
+          </form>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="container">
+          <p>&copy; 2026 Roosly. All rights reserved.</p>
+          <div className="social-links">
+            <a href="#">Twitter</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">GitHub</a>
+            <a href="#">Facebook</a>
+          </div>
+        </div>
+      </footer>
+    </>
+  )
 }

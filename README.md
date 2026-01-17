@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Roosly
 
-## Getting Started
+A professional website for Roosly, a digital services company specializing in website creation, software engineering, app development, technical consultation, and AI consultation.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Responsive design
+- Interactive service details with React state
+- Contact form
+- Modern UI with smooth animations
+- Built with Next.js for optimal performance
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 14 with App Router
+- React 18
+- TypeScript
+- Custom CSS3
+- JavaScript for dynamic content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment
 
-## Learn More
+This site is configured for deployment on Vercel. Simply connect your GitHub repository to Vercel and it will deploy automatically.
 
-To learn more about Next.js, take a look at the following resources:
+### Local Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run locally:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Run the development server: `npm run dev`
+4. Open [http://localhost:3000](http://localhost:3000) with your browser
 
-## Deploy on Vercel
+## Services Offered
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Website Creation & Hosting**: Custom websites with hosting and maintenance
+- **Custom Software Engineering**: End-to-end software solutions
+- **App Development**: iOS, Android, and cross-platform apps
+- **Technical Consultation**: Architecture and technology strategy
+- **AI Consultation**: ML, LLM integration, and AI strategy
+- **Performance Optimization**: Speed and efficiency improvements
