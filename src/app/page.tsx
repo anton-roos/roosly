@@ -6,41 +6,41 @@ import RooslyLogo from '../components/RooslyLogo'
 import emailjs from '@emailjs/browser'
 
 const serviceDetails = {
-  websites: {
-    title: 'Website Creation & Hosting',
-    icon: '🌐',
-    description: 'We design and deploy stunning websites tailored to your business needs, with reliable hosting and maintenance.',
-    features: ['Responsive Design', 'SEO Optimization', 'Performance Tuning', 'SSL Security', '24/7 Hosting Support', 'Regular Backups']
+  ai_strategy: {
+    title: 'AI Transformation & Consulting',
+    icon: '🧠', // Brain icon feels more "partner" than a robot
+    description: 'We audit your business DNA to identify high-impact AI opportunities that reduce overhead and unlock new revenue streams.',
+    features: ['AI Readiness Audit', 'Custom LLM Implementation', 'Workflow Automation', 'Predictive Growth Modeling', 'Data Strategy', 'Ethical AI Governance']
   },
-  software: {
-    title: 'Custom Software Engineering',
+  intelligent_software: {
+    title: 'Cognitive Software Engineering',
     icon: '💻',
-    description: 'End-to-end software solutions designed specifically for your business challenges and goals.',
-    features: ['System Architecture', 'Full-Stack Development', 'Quality Assurance', 'Scalable Solutions', 'Cloud Integration', 'Maintenance & Support']
+    description: 'We don’t just build code; we build systems that think. Custom software infused with machine learning to automate complex decision-making.',
+    features: ['Self-Optimizing Systems', 'Intelligent API Integration', 'Scalable Cloud Architecture', 'Automated QA', 'Legacy System Modernization']
   },
-  apps: {
-    title: 'App Development',
+  smart_ecosystems: {
+    title: 'High-Performance Web Ecosystems',
+    icon: '🌐',
+    description: 'Beyond static sites. We build AI-driven digital platforms that personalize user experiences and convert visitors into partners.',
+    features: ['AI-Driven Personalization', 'Dynamic SEO Content', 'User Behavior Analytics', 'Neural Search Integration', 'Global Edge Hosting']
+  },
+  mobile_intelligence: {
+    title: 'Intelligent App Development',
     icon: '📱',
-    description: 'Native and cross-platform mobile applications built with modern technologies and best practices.',
-    features: ['iOS & Android', 'React Native', 'Flutter', 'User Experience Design', 'App Store Deployment', 'Analytics Integration']
+    description: 'Next-gen mobile applications that leverage on-device AI for smarter, faster, and more intuitive user interactions.',
+    features: ['Predictive UX/UI', 'Voice & Image Recognition', 'Cross-Platform Excellence', 'Real-time Data Sync', 'Biometric Security']
   },
-  technical: {
-    title: 'Technical Consultation',
-    icon: '🔧',
-    description: 'Expert guidance on architecture, infrastructure, and technology strategy for your projects.',
-    features: ['Architecture Review', 'Technology Stack Selection', 'Performance Analysis', 'Security Assessment', 'DevOps Strategy', 'Team Training']
+  strategic_ops: {
+    title: 'Technical & Business Advisory',
+    icon: '🤝',
+    description: 'Your fractional CTO and Business Partner. We align your technology roadmap with your long-term commercial objectives.',
+    features: ['Digital Transformation Roadmap', 'Tech Stack Optimization', 'Security & Risk Assessment', 'Infrastructure Scaling', 'Team Capability Building']
   },
-  ai: {
-    title: 'AI Consultation',
-    icon: '🤖',
-    description: 'Harness the power of artificial intelligence with our strategic consultation and implementation services.',
-    features: ['ML Model Development', 'LLM Integration', 'Data Analysis', 'Predictive Analytics', 'Automation Solutions', 'AI Strategy Planning']
-  },
-  performance: {
-    title: 'Performance Optimization',
+  automation_performance: {
+    title: 'Autonomous Performance',
     icon: '⚡',
-    description: 'Speed up your digital products with performance analysis and optimization strategies.',
-    features: ['Code Profiling', 'Database Optimization', 'Caching Strategies', 'Load Testing', 'CDN Setup', 'Monitoring & Alerts']
+    description: 'Eliminating digital friction. We use automated monitoring and AI-driven tuning to ensure your systems run at peak efficiency 24/7.',
+    features: ['Automated Load Balancing', 'Predictive Maintenance', 'Real-time Speed Optimization', 'Database Self-Tuning', 'Security Autopilot']
   }
 }
 
@@ -155,8 +155,10 @@ export default function Home() {
       {/* Navigation */}
       <nav className="navbar">
         <div className="nav-container">
-          <RooslyLogo className="logo" size={50} />
-          <div className='title'>Roosly</div>
+          <div className="logo">
+            <RooslyLogo className="logo-icon" size={50} />
+            <span className="logo-title">Roosly</span>
+          </div>
           <ul className="nav-menu">
             <li><a href="#services" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'services'); scrollToSection('services') }}>Services</a></li>
             <li><a href="#about" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'about'); scrollToSection('about') }}>About</a></li>
@@ -247,9 +249,9 @@ export default function Home() {
         <div className="container">
           <p>&copy; 2026 Roosly. All rights reserved.</p>
           <div className="social-links">
-            <a href="#" onClick={() => handleSocialClick('twitter')}>Twitter</a>
-            <a href="#" onClick={() => handleSocialClick('linkedin')}>LinkedIn</a>
-            <a href="#" onClick={() => handleSocialClick('github')}>GitHub</a>
+            <a href="https://x.com/antonieroos" onClick={() => handleSocialClick('x')}>X</a>
+            <a href="https://www.linkedin.com/in/antonroos/" onClick={() => handleSocialClick('linkedin')}>LinkedIn</a>
+            <a href="https://github.com/anton-roos" onClick={() => handleSocialClick('github')}>GitHub</a>
             <a href="#" onClick={() => handleSocialClick('facebook')}>Facebook</a>
           </div>
         </div>

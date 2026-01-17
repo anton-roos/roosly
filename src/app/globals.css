@@ -40,7 +40,16 @@ body {
 }
 
 .logo {
-    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    font-size: 2rem; /* Increased font size for prominence */
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.logo-title {
+    margin-left: 10px; /* Add spacing between logo and title */
+    font-size: 1.5rem; /* Slightly smaller than logo */
     font-weight: bold;
     color: var(--primary-color);
 }
