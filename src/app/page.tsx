@@ -225,20 +225,26 @@ export default function Home() {
       {/* About Section */}
       <section id="about" className="about">
         <div className="container">
-          <h2>About Roosly</h2>
-          <p>At Roosly, we&apos;re passionate about delivering innovative digital solutions that drive real business value. With a team of experienced developers, consultants, and AI specialists, we transform ideas into powerful digital products.</p>
+          <h2>Beyond Development: Your Strategic AI Partner</h2>
+          <p>
+            Roosly was founded to bridge the gap between complex AI potential and real-world business growth.
+            We don’t just deliver code; we provide the <strong>digital architecture</strong> and <strong>strategic intelligence</strong>
+            required to lead in an AI-first economy. From auditing internal workflows to deploying custom neural networks,
+            we look at your business as a whole to ensure every digital touchpoint is an asset.
+          </p>
+
           <div className="about-features">
             <div className="feature">
-              <h4>Expert Team</h4>
-              <p>Seasoned professionals with years of experience across all major technologies.</p>
+              <h4>The Holistic Audit</h4>
+              <p>We analyze your existing digital footprint to identify friction points where AI can unlock immediate ROI and efficiency.</p>
             </div>
             <div className="feature">
-              <h4>Client-Focused</h4>
-              <p>We prioritize your success and work closely with you every step of the way.</p>
+              <h4>Integrated AI Strategy</h4>
+              <p>Our consultants don’t work in silos. We integrate intelligent automation into your core business processes, not just the edges.</p>
             </div>
             <div className="feature">
-              <h4>Innovation First</h4>
-              <p>Always exploring cutting-edge technologies to deliver the best solutions.</p>
+              <h4>Sustainable Scalability</h4>
+              <p>We build with the future in mind, ensuring your software, apps, and data structures are ready for the next decade of digital evolution.</p>
             </div>
           </div>
         </div>
