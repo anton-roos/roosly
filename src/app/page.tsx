@@ -175,24 +175,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="contact">
-        <div className="container">
-          <h2>Get In Touch</h2>
-          <form className="contact-form" onSubmit={handleContactSubmit}>
-            <input type="text" name="name" placeholder="Your Name" required />
-            <input type="email" name="email" placeholder="Your Email" required />
-            <textarea name="message" placeholder="Your Message" rows={5} required></textarea>
-            <button type="submit" className="submit-btn">Send Message</button>
-            {formMessage && (
-              <div id="form-message" className="success" style={{ display: 'block' }}>
-                {formMessage}
-              </div>
-            )}
-          </form>
-        </div>
-      </section>
-
       {/* Services Section */}
       <section id="services" className="services">
         <div className="container">
@@ -219,6 +201,24 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="contact">
+        <div className="container">
+          <h2>Get In Touch</h2>
+          <form className="contact-form" onSubmit={handleContactSubmit}>
+            <input type="text" name="name" placeholder="Your Name" required />
+            <input type="email" name="email" placeholder="Your Email" required />
+            <textarea name="message" placeholder="Your Message" rows={5} required></textarea>
+            <button type="submit" className="submit-btn">Send Message</button>
+            {formMessage && (
+              <div id="form-message" className="success" style={{ display: 'block' }}>
+                {formMessage}
+              </div>
+            )}
+          </form>
         </div>
       </section>
 
