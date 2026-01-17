@@ -1,5 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 
 // Ensure DATABASE_URL is defined
 if (!process.env.DATABASE_URL) {
@@ -8,8 +9,26 @@ if (!process.env.DATABASE_URL) {
 
 const sql = neon(process.env.DATABASE_URL!); // Use non-null assertion operator
 
+// Helper function to check admin authentication
+async function checkAdminAuth() {
+    const session = await auth();
+    
+    if (!session || !session.user) {
+        return { authorized: false, response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+    }
+    
+    if (session.user.role !== "admin") {
+        return { authorized: false, response: NextResponse.json({ error: "Forbidden - Admin access required" }, { status: 403 }) };
+    }
+    
+    return { authorized: true, response: null };
+}
+
 // Wrap all API handlers with try-catch for error handling
 export async function GET() {
+    const authCheck = await checkAdminAuth();
+    if (!authCheck.authorized) return authCheck.response;
+    
     try {
         const customers = await sql`SELECT * FROM customers ORDER BY id DESC;`;
         return NextResponse.json(customers || []);
@@ -23,6 +42,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+    const authCheck = await checkAdminAuth();
+    if (!authCheck.authorized) return authCheck.response;
+    
     try {
         const body = await request.json();
         const { name, email } = body;
@@ -88,6 +110,9 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+    const authCheck = await checkAdminAuth();
+    if (!authCheck.authorized) return authCheck.response;
+    
     try {
         const body = await request.json();
         const { id, name, email } = body;
@@ -136,6 +161,9 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+    const authCheck = await checkAdminAuth();
+    if (!authCheck.authorized) return authCheck.response;
+    
     try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
