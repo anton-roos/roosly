@@ -168,8 +168,26 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <h1>Intelligence by nature!</h1>
-          <p>Your Partner in Digital Transformation</p>
+          <h1>Your Business, Evolved through Intelligence.</h1>
+          <p>We partner with ambitious companies to audit, automate, and optimize your entire digital ecosystem using bespoke AI solutions.</p>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="contact">
+        <div className="container">
+          <h2>Get In Touch</h2>
+          <form className="contact-form" onSubmit={handleContactSubmit}>
+            <input type="text" name="name" placeholder="Your Name" required />
+            <input type="email" name="email" placeholder="Your Email" required />
+            <textarea name="message" placeholder="Your Message" rows={5} required></textarea>
+            <button type="submit" className="submit-btn">Send Message</button>
+            {formMessage && (
+              <div id="form-message" className="success" style={{ display: 'block' }}>
+                {formMessage}
+              </div>
+            )}
+          </form>
         </div>
       </section>
 
@@ -221,24 +239,6 @@ export default function Home() {
               <p>Always exploring cutting-edge technologies to deliver the best solutions.</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="contact">
-        <div className="container">
-          <h2>Get In Touch</h2>
-          <form className="contact-form" onSubmit={handleContactSubmit}>
-            <input type="text" name="name" placeholder="Your Name" required />
-            <input type="email" name="email" placeholder="Your Email" required />
-            <textarea name="message" placeholder="Your Message" rows={5} required></textarea>
-            <button type="submit" className="submit-btn">Send Message</button>
-            {formMessage && (
-              <div id="form-message" className="success" style={{ display: 'block' }}>
-                {formMessage}
-              </div>
-            )}
-          </form>
         </div>
       </section>
 
