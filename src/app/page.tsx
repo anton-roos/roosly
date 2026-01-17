@@ -234,7 +234,7 @@ export default function Home() {
           <h2>Beyond Development: Your Strategic AI Partner</h2>
           <p>
             Roosly was founded to bridge the gap between complex AI potential and real-world business growth.
-            We don’t just deliver code; we provide the <strong>digital architecture</strong> and <strong>strategic intelligence</strong>
+            We don't just deliver code; we provide the <strong>digital architecture</strong> and <strong>strategic intelligence</strong>
             required to lead in an AI-first economy. From auditing internal workflows to deploying custom neural networks,
             we look at your business as a whole to ensure every digital touchpoint is an asset.
           </p>
@@ -264,7 +264,6 @@ export default function Home() {
             <a href="https://x.com/antonieroos" onClick={() => handleSocialClick('x')}>X</a>
             <a href="https://www.linkedin.com/in/antonroos/" onClick={() => handleSocialClick('linkedin')}>LinkedIn</a>
             <a href="https://github.com/anton-roos" onClick={() => handleSocialClick('github')}>GitHub</a>
-            <a href="#" onClick={() => handleSocialClick('facebook')}>Facebook</a>
           </div>
         </div>
       </footer>
