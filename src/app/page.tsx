@@ -47,6 +47,7 @@ const serviceDetails = {
 export default function Home() {
   const [expandedService, setExpandedService] = useState<string | null>(null)
   const [formMessage, setFormMessage] = useState('')
+  const [isSending, setIsSending] = useState(false) // Add loading state
   const analytics = useAnalytics()
 
   useEffect(() => {
@@ -102,6 +103,7 @@ export default function Home() {
     const email = formData.get('email') as string
     const message = formData.get('message') as string
 
+    setIsSending(true) // Set loading state to true
     try {
       await emailjs.send(
         'service_tiabc2r',
@@ -122,6 +124,8 @@ export default function Home() {
       console.error('Email send error:', error)
       setFormMessage('Sorry, there was an error sending your message. Please try again.')
       analytics.trackFormSubmit('contact_form', false)
+    } finally {
+      setIsSending(false) // Reset loading state
     }
     setTimeout(() => setFormMessage(''), 5000)
   }
@@ -212,7 +216,9 @@ export default function Home() {
             <input type="text" name="name" placeholder="Your Name" required />
             <input type="email" name="email" placeholder="Your Email" required />
             <textarea name="message" placeholder="Your Message" rows={5} required></textarea>
-            <button type="submit" className="submit-btn">Send Message</button>
+            <button type="submit" className="submit-btn" disabled={isSending}>
+              {isSending ? 'Sending...' : 'Send Message'}
+            </button>
             {formMessage && (
               <div id="form-message" className="success" style={{ display: 'block' }}>
                 {formMessage}
