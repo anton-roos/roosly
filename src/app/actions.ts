@@ -1,4 +1,4 @@
-// app/actions.ts
+// Server Actions for database operations
 "use server";
 import { neon } from "@neondatabase/serverless";
 
@@ -9,7 +9,19 @@ if (!process.env.DATABASE_URL) {
 
 const sql = neon(process.env.DATABASE_URL);
 
+/**
+ * Example server action - replace with your actual data needs
+ * Server actions provide a secure way to perform server-side operations
+ */
 export async function getData() {
-    const data = await sql`SELECT * FROM your_table_name;`;
-    return data;
+    try {
+        const data = await sql`SELECT * FROM your_table_name ORDER BY id DESC;`;
+        return { success: true, data };
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return { 
+            success: false, 
+            error: error instanceof Error ? error.message : "Unknown error" 
+        };
+    }
 }

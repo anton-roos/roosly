@@ -1,6 +1,20 @@
-const RooslyLogo = ({ className = "", size = 200 }: { className?: string; size?: number }) => {
+import Image from 'next/image';
+
+interface RooslyLogoProps {
+  className?: string;
+  size?: number;
+}
+
+const RooslyLogo = ({ className = "", size = 200 }: RooslyLogoProps) => {
   return (
-    <img src="/logo.svg" alt="Roosly Logo" className={className} style={{ width: size, height: size }} />
+    <Image 
+      src="/logo.svg" 
+      alt="Roosly Logo" 
+      className={className} 
+      width={size} 
+      height={size}
+      priority
+    />
   );
 };
 

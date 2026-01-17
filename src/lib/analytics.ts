@@ -1,132 +1,101 @@
 // Google Analytics 4 utilities for comprehensive tracking
+
+type GtagCommand = 'config' | 'event' | 'js';
+type EventAction = 'click' | 'submit' | 'view' | 'expand' | 'contact' | 'navigate' | 'scroll' | 'timing_complete' | 'share' | 'follow' | 'exception';
+
 declare global {
   interface Window {
-    gtag: (...args: unknown[]) => void;
+    gtag: (command: GtagCommand, ...args: unknown[]) => void;
     dataLayer: unknown[];
   }
 }
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'YOUR_GA_MEASUREMENT_ID';
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-// Initialize GA
-export const initGA = () => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('js', new Date());
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      page_title: document.title,
-      page_location: window.location.href,
-    });
-  }
+// Helper to check if gtag is available
+const isGtagAvailable = (): boolean => {
+  return typeof window !== 'undefined' && typeof window.gtag === 'function' && Boolean(GA_MEASUREMENT_ID);
 };
 
 // Track page views
-export const trackPageView = (path: string, title?: string) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      page_path: path,
-      page_title: title || document.title,
-    });
-  }
+export const trackPageView = (path: string, title?: string): void => {
+  if (!isGtagAvailable() || !GA_MEASUREMENT_ID) return;
+
+  window.gtag('config', GA_MEASUREMENT_ID, {
+    page_path: path,
+    page_title: title || document.title,
+  });
 };
 
 // Track custom events
 export const trackEvent = (
-  action: string,
+  action: EventAction,
   category: string,
   label?: string,
   value?: number,
   customParameters?: Record<string, unknown>
-) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-      ...customParameters,
-    });
-  }
+): void => {
+  if (!isGtagAvailable()) return;
+
+  window.gtag('event', action, {
+    event_category: category,
+    event_label: label,
+    value: value,
+    ...customParameters,
+  });
 };
 
 // Track user interactions
-export const trackButtonClick = (buttonName: string, section?: string) => {
+export const trackButtonClick = (buttonName: string, section?: string): void => {
   trackEvent('click', 'button', buttonName, undefined, {
     section: section || 'unknown',
   });
 };
 
-export const trackFormSubmit = (formName: string, success: boolean = true) => {
+export const trackFormSubmit = (formName: string, success: boolean = true): void => {
   trackEvent('submit', 'form', formName, success ? 1 : 0, {
     success: success,
   });
 };
 
-export const trackServiceInteraction = (serviceName: string, action: 'view' | 'expand' | 'contact') => {
+export const trackServiceInteraction = (serviceName: string, action: 'view' | 'expand' | 'contact'): void => {
   trackEvent(action, 'service', serviceName);
 };
 
-export const trackNavigation = (from: string, to: string) => {
+export const trackNavigation = (from: string, to: string): void => {
   trackEvent('navigate', 'navigation', `${from} -> ${to}`);
 };
 
 // Track scroll depth
-export const trackScrollDepth = (depth: number) => {
+export const trackScrollDepth = (depth: number): void => {
   trackEvent('scroll', 'engagement', `${depth}%`, depth);
 };
 
 // Track time on page
-export const trackTimeOnPage = (timeInSeconds: number, page: string) => {
+export const trackTimeOnPage = (timeInSeconds: number, page: string): void => {
   trackEvent('timing_complete', 'engagement', page, timeInSeconds, {
     name: 'time_on_page',
   });
 };
 
 // Track outbound links
-export const trackOutboundLink = (url: string, linkText?: string) => {
+export const trackOutboundLink = (url: string, linkText?: string): void => {
   trackEvent('click', 'outbound_link', url, undefined, {
     link_text: linkText,
   });
 };
 
 // Track social interactions
-export const trackSocialInteraction = (platform: string, action: 'click' | 'share' | 'follow') => {
+export const trackSocialInteraction = (platform: string, action: 'click' | 'share' | 'follow'): void => {
   trackEvent(action, 'social', platform);
 };
 
 // Track errors
-export const trackError = (error: string, fatal: boolean = false) => {
+export const trackError = (error: string, fatal: boolean = false): void => {
   trackEvent('exception', 'error', error, fatal ? 1 : 0, {
     fatal: fatal,
   });
-};
-
-// Track custom dimensions/metrics
-export const setCustomDimension = (index: number, value: string) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      [`custom_map.dimension${index}`]: value,
-    });
-  }
-};
-
-export const setCustomMetric = (index: number, value: number) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      [`custom_map.metric${index}`]: value,
-    });
-  }
-};
-
-// E-commerce tracking (if needed in future)
-export const trackPurchase = (transactionId: string, value: number, currency: string = 'USD') => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'purchase', {
-      transaction_id: transactionId,
-      value: value,
-      currency: currency,
-    });
-  }
-};
-
+}
 // Hook for React components
 export const useAnalytics = () => {
   return {

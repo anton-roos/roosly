@@ -1,9 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAnalytics } from '../lib/analytics'
 import RooslyLogo from '../components/RooslyLogo'
 import emailjs from '@emailjs/browser'
+
+interface ServiceDetail {
+  title: string
+  icon: string
+  description: string
+  features: string[]
+}
+
+type ServiceId = keyof typeof serviceDetails
 
 const serviceDetails = {
   ai_strategy: {
@@ -51,14 +60,9 @@ export default function Home() {
   const analytics = useAnalytics()
 
   useEffect(() => {
-    // Track page load time
     const loadTime = performance.now()
-
-    // Track initial page view
-    analytics.trackTimeOnPage(Math.round(loadTime / 1000), 'home')
-
-    // Track scroll depth
     let maxScrollDepth = 0
+
     const handleScroll = () => {
       const scrollTop = window.pageYOffset
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
@@ -70,15 +74,14 @@ export default function Home() {
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
-    // Track time spent on page
     const timeInterval = setInterval(() => {
       const timeSpent = Math.round((performance.now() - loadTime) / 1000)
-      if (timeSpent % 30 === 0 && timeSpent > 0) { // Track every 30 seconds
+      if (timeSpent % 30 === 0 && timeSpent > 0) {
         analytics.trackTimeOnPage(timeSpent, 'home')
       }
-    }, 1000)
+    }, 30000) // Check every 30 seconds instead of every second
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
@@ -86,16 +89,16 @@ export default function Home() {
     }
   }, [analytics])
 
-  const showServiceDetails = (serviceId: string) => {
+  const showServiceDetails = useCallback((serviceId: string) => {
     const newExpanded = serviceId === expandedService ? null : serviceId
     setExpandedService(newExpanded)
 
     if (newExpanded) {
       analytics.trackServiceInteraction(serviceId, 'expand')
     }
-  }
+  }, [expandedService, analytics])
 
-  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleContactSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
     const formData = new FormData(form)
@@ -103,19 +106,26 @@ export default function Home() {
     const email = formData.get('email') as string
     const message = formData.get('message') as string
 
-    setIsSending(true) // Set loading state to true
+    setIsSending(true)
     try {
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS configuration is missing')
+      }
+
       await emailjs.send(
-        'service_tiabc2r',
-        'template_8ptz2d8',
+        serviceId,
+        templateId,
         {
           from_name: name,
           from_email: email,
           time: new Date().toISOString(),
           message: message,
-          to_email: 'antonroos992@gmail.com'
         },
-        'tfLmRyTiSovdCULB8'
+        publicKey
       )
       setFormMessage('Thank you! We will get back to you soon.')
       analytics.trackFormSubmit('contact_form', true)
@@ -125,22 +135,22 @@ export default function Home() {
       setFormMessage('Sorry, there was an error sending your message. Please try again.')
       analytics.trackFormSubmit('contact_form', false)
     } finally {
-      setIsSending(false) // Reset loading state
+      setIsSending(false)
     }
     setTimeout(() => setFormMessage(''), 5000)
-  }
+  }, [analytics])
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = useCallback((sectionId: string) => {
     analytics.trackNavigation('hero', sectionId)
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
-  }
+  }, [analytics])
 
-  const handleCTAClick = () => {
+  const handleCTAClick = useCallback(() => {
     analytics.trackButtonClick('explore_services', 'hero')
     scrollToSection('services')
-  }
+  }, [analytics, scrollToSection])
 
-  const handleLearnMoreClick = (serviceId: string, isExpanded: boolean) => {
+  const handleLearnMoreClick = useCallback((serviceId: string, isExpanded: boolean) => {
     analytics.trackButtonClick(`learn_more_${serviceId}`, 'services')
     if (isExpanded) {
       analytics.trackServiceInteraction(serviceId, 'contact')
@@ -148,25 +158,25 @@ export default function Home() {
     } else {
       showServiceDetails(serviceId)
     }
-  }
+  }, [analytics, scrollToSection, showServiceDetails])
 
-  const handleSocialClick = (platform: string) => {
+  const handleSocialClick = useCallback((platform: string) => {
     analytics.trackSocialInteraction(platform, 'click')
-  }
+  }, [analytics])
 
   return (
     <>
       {/* Navigation */}
-      <nav className="navbar">
+      <nav className="navbar" role="navigation" aria-label="Main navigation">
         <div className="nav-container">
           <div className="logo">
             <RooslyLogo className="logo-icon" size={50} />
             <span className="logo-title">Roosly</span>
           </div>
-          <ul className="nav-menu">
-            <li><a href="#services" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'services'); scrollToSection('services') }}>Services</a></li>
-            <li><a href="#about" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'about'); scrollToSection('about') }}>About</a></li>
-            <li><a href="#contact" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'contact'); scrollToSection('contact') }}>Contact</a></li>
+          <ul className="nav-menu" role="list">
+            <li><a href="#services" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'services'); scrollToSection('services') }} aria-label="Navigate to Services section">Services</a></li>
+            <li><a href="#about" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'about'); scrollToSection('about') }} aria-label="Navigate to About section">About</a></li>
+            <li><a href="#contact" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'contact'); scrollToSection('contact') }} aria-label="Navigate to Contact section">Contact</a></li>
           </ul>
         </div>
       </nav>
@@ -199,7 +209,12 @@ export default function Home() {
                     </ul>
                   </div>
                 )}
-                <button className="learn-more" onClick={() => handleLearnMoreClick(id, expandedService === id)}>
+                <button 
+                  className="learn-more" 
+                  onClick={() => handleLearnMoreClick(id, expandedService === id)}
+                  aria-label={`${expandedService === id ? 'Get started' : 'Learn more'} about ${service.title}`}
+                  aria-expanded={expandedService === id}
+                >
                   {expandedService === id ? 'Get Started' : 'Learn More'}
                 </button>
               </div>
@@ -212,11 +227,36 @@ export default function Home() {
       <section id="contact" className="contact">
         <div className="container">
           <h2>Get In Touch</h2>
-          <form className="contact-form" onSubmit={handleContactSubmit}>
-            <input type="text" name="name" placeholder="Your Name" required />
-            <input type="email" name="email" placeholder="Your Email" required />
-            <textarea name="message" placeholder="Your Message" rows={5} required></textarea>
-            <button type="submit" className="submit-btn" disabled={isSending}>
+          <form className="contact-form" onSubmit={handleContactSubmit} aria-label="Contact form">
+            <input 
+              type="text" 
+              name="name" 
+              placeholder="Your Name" 
+              required 
+              aria-label="Your name"
+              autoComplete="name"
+            />
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Your Email" 
+              required 
+              aria-label="Your email address"
+              autoComplete="email"
+            />
+            <textarea 
+              name="message" 
+              placeholder="Your Message" 
+              rows={5} 
+              required
+              aria-label="Your message"
+            ></textarea>
+            <button 
+              type="submit" 
+              className="submit-btn" 
+              disabled={isSending}
+              aria-label={isSending ? 'Sending message...' : 'Send message'}
+            >
               {isSending ? 'Sending...' : 'Send Message'}
             </button>
             {formMessage && (
@@ -260,10 +300,28 @@ export default function Home() {
       <footer className="footer">
         <div className="container">
           <p>&copy; 2026 Roosly. All rights reserved.</p>
-          <div className="social-links">
-            <a href="https://x.com/antonieroos" onClick={() => handleSocialClick('x')}>X</a>
-            <a href="https://www.linkedin.com/in/antonroos/" onClick={() => handleSocialClick('linkedin')}>LinkedIn</a>
-            <a href="https://github.com/anton-roos" onClick={() => handleSocialClick('github')}>GitHub</a>
+          <div className="social-links" role="list" aria-label="Social media links">
+            <a 
+              href="https://x.com/antonieroos" 
+              onClick={() => handleSocialClick('x')}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow us on X (formerly Twitter)"
+            >X</a>
+            <a 
+              href="https://www.linkedin.com/in/antonroos/" 
+              onClick={() => handleSocialClick('linkedin')}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Connect with us on LinkedIn"
+            >LinkedIn</a>
+            <a 
+              href="https://github.com/anton-roos" 
+              onClick={() => handleSocialClick('github')}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View our projects on GitHub"
+            >GitHub</a>
           </div>
         </div>
       </footer>
