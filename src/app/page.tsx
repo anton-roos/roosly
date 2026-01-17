@@ -156,6 +156,7 @@ export default function Home() {
       <nav className="navbar">
         <div className="nav-container">
           <RooslyLogo className="logo" size={50} />
+          <div className='title'>Roosly</div>
           <ul className="nav-menu">
             <li><a href="#services" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'services'); scrollToSection('services') }}>Services</a></li>
             <li><a href="#about" onClick={(e) => { e.preventDefault(); analytics.trackNavigation('nav', 'about'); scrollToSection('about') }}>About</a></li>
@@ -167,9 +168,8 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <h1>Welcome to Roosly</h1>
+          <h1>Intelligence by nature!</h1>
           <p>Your Partner in Digital Transformation</p>
-          <button className="cta-button" onClick={handleCTAClick}>Explore Our Services</button>
         </div>
       </section>
 
