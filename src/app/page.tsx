@@ -109,6 +109,7 @@ export default function Home() {
         {
           from_name: name,
           from_email: email,
+          time: new Date().toISOString(),
           message: message,
           to_email: 'antonroos992@gmail.com'
         },
