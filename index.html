@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roosly - Digital Services</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Roosly</div>
+            <ul class="nav-menu">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Roosly</h1>
+            <p>Your Partner in Digital Transformation</p>
+            <button class="cta-button" hx-get="/services" hx-target="#services" hx-trigger="click">Explore Our Services</button>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🌐</div>
+                    <h3>Website Creation & Hosting</h3>
+                    <p>We design and deploy stunning websites tailored to your business needs, with reliable hosting and maintenance.</p>
+                    <button class="learn-more" hx-get="/service-details/websites" hx-target="this" hx-swap="outerHTML">Learn More</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">💻</div>
+                    <h3>Custom Software Engineering</h3>
+                    <p>End-to-end software solutions designed specifically for your business challenges and goals.</p>
+                    <button class="learn-more" hx-get="/service-details/software" hx-target="this" hx-swap="outerHTML">Learn More</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📱</div>
+                    <h3>App Development</h3>
+                    <p>Native and cross-platform mobile applications built with modern technologies and best practices.</p>
+                    <button class="learn-more" hx-get="/service-details/apps" hx-target="this" hx-swap="outerHTML">Learn More</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🔧</div>
+                    <h3>Technical Consultation</h3>
+                    <p>Expert guidance on architecture, infrastructure, and technology strategy for your projects.</p>
+                    <button class="learn-more" hx-get="/service-details/technical" hx-target="this" hx-swap="outerHTML">Learn More</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🤖</div>
+                    <h3>AI Consultation</h3>
+                    <p>Harness the power of artificial intelligence with our strategic consultation and implementation services.</p>
+                    <button class="learn-more" hx-get="/service-details/ai" hx-target="this" hx-swap="outerHTML">Learn More</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3>Performance Optimization</h3>
+                    <p>Speed up your digital products with performance analysis and optimization strategies.</p>
+                    <button class="learn-more" hx-get="/service-details/performance" hx-target="this" hx-swap="outerHTML">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Roosly</h2>
+            <p>At Roosly, we're passionate about delivering innovative digital solutions that drive real business value. With a team of experienced developers, consultants, and AI specialists, we transform ideas into powerful digital products.</p>
+            <div class="about-features">
+                <div class="feature">
+                    <h4>Expert Team</h4>
+                    <p>Seasoned professionals with years of experience across all major technologies.</p>
+                </div>
+                <div class="feature">
+                    <h4>Client-Focused</h4>
+                    <p>We prioritize your success and work closely with you every step of the way.</p>
+                </div>
+                <div class="feature">
+                    <h4>Innovation First</h4>
+                    <p>Always exploring cutting-edge technologies to deliver the best solutions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <form class="contact-form" hx-post="/submit-contact" hx-target="#form-message">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit" class="submit-btn">Send Message</button>
+                <div id="form-message"></div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Roosly. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
