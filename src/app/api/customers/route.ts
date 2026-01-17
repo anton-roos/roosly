@@ -11,8 +11,9 @@ const sql = neon(process.env.DATABASE_URL!); // Use non-null assertion operator
 // Wrap all API handlers with try-catch for error handling
 export async function GET() {
     try {
+        // Ensure the response is always an array
         const customers = await sql`SELECT * FROM customers;`;
-        return NextResponse.json(customers);
+        return NextResponse.json(customers || []);
     } catch (error) {
         console.error("Error fetching customers:", error);
         console.error("Error details:", (error as any).message, (error as any).stack); // Enhanced error logging
